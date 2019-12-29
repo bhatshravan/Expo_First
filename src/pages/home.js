@@ -1,38 +1,28 @@
-import React, { Component } from 'react';
+import React, { useState, Component } from 'react';
 import { Text } from '@ui-kitten/components';
-import { StyleSheet,View } from "react-native";
+import { StyleSheet, View, FlatList } from 'react-native';
 import styles from '../styles/style';
-import { useStoreState,useStoreAction } from 'easy-peasy';
+import { useStoreState, useStoreActions } from 'easy-peasy';
 
-class Home extends Component {
-	state = {
-		selectedIndex: [0,1,2]
-	}
-	renderLists(){
-		
-		// let todos = this.useStoreState(state => state.todos.items);
-		// console.log(todos);
-		let c = this.state.selectedIndex;
-		let b=[]
-		c.map(element=>{
-			b.push(<Text category="h3" style={styles.white} key={element}>{element}</Text>)
-		});
-		
-		return b;
-	}
-	
-	render() {
-		const { navigation } = this.props;
-		return (
-				<View category="h2" style={styles.conts}>
-					{this.renderLists()}
-					<Text>{navigation.getParam('test', 'NO-ID')}</Text>
-					<Text>Test</Text>
-				</View>
-			
-		)
-	}
-}
+const Home = props => {
+  let [selectedIndex, SCI] = useState([0, 1, 2]);
+  let todos = useStoreState(state => state.todos.items);
+	let user = useStoreState(state => state.users);
+	const addTodo = useStoreActions(actions => actions.todos.add);
+	//{() => addTodo(text)}
 
+  const { navigation } = props;
+  return (
+    <View style={styles.conts}>
+      <Text style={styles.white}>{user}</Text>
+      <Text>{navigation.getParam('test', 'NO-ID')}</Text>
+      <Text>Test</Text>
+      <FlatList
+        data={todos}
+        renderItem={({ item }) => <Text style={styles.item}>{item}</Text>}
+      />
+    </View>
+  );
+};
 
 export default Home;
