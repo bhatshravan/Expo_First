@@ -1,61 +1,40 @@
-import React,{ Component } from 'react';
-import { StyleSheet,View, ScrollView } from "react-native";
+import React, {useState,useContext} from 'react';
+import styles from '../styles/style';
+import { View, Alert } from 'react-native';
 import { Button,Text } from '@ui-kitten/components';
+import MyContext from '../store/context1';
+import { useStoreState } from 'easy-peasy';
 
+const Splash = (props) => {
 
-class Splash extends Component {
-	constructor(props) {
-		super(props);
-		this.y=0;
-	}
+	let [t1,updateT1] = useState("Hello");
+	const UserName = useContext(MyContext);
 
-	state = {
-		select: "Hello world"
-	}
-
-	changePress(){
-		
-		if(this.y==0){
-			this.setState({select: "No world"});
-			this.y=1;
+	function thisTest(){
+		if(t1=="Hello2"){
+			updateT1("No2");
 		}
 		else{
-			this.setState({select: "Hello world"});
-			this.y=0;
+			updateT1("Hello2");
 		}
 	}
 
+	const todos = useStoreState(state => state.user)
 
-	render() {
-		return (
-			// <View >
-				<View style={styles.container}>
-				<Button onPress={()=>this.changePress()}>Test</Button>
-				<Text category='h1' status='primary' style={styles.Texts}>{this.state.select}</Text>
-				</View>
-			// </View>
-		)
-	}
+
+	return(
+		<View styles={styles.conts}>
+			<Button onPress={thisTest}>{t1}</Button>
+			<Button>{todos}</Button>
+			<Button onPress={()=>{Alert.alert("Yo","Test");}}>Alerts</Button>
+			<Button onPress={() => props.navigation.navigate('Home',{test:"tes"})}>Another Day</Button>
+		</View>
+	);
 }
 
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 0.5,
-		color: '#fff',
-		padding: 16,
-		margin: 30,
-		backgroundColor: "#ffaa20",
-		justifyContent: "center",
-		alignItems:"center"
-	},
-	Texts: {
-		// flex:0.5
-	},
-	White:{
-		color:'#fff'
-	}
-});
-
+Splash.navigationOptions = ({ navigation }) => ({
+	title: "Stories",
+	headerShown: false
+})
 
 export default Splash;
